@@ -3,13 +3,12 @@ from net.losses import StdLoss, TLoss, L_TV, L_color
 from utils.imresize import np_imresize
 from utils.image_io import *
 from skimage.color import rgb2hsv
-import torch
 from net.vae import VAE
 import numpy as np
 from net.Net import Net
 import argparse
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+import torch
 
 
 class uie(object):
@@ -197,7 +196,7 @@ class uie(object):
 
 def uie_opt(opt):
     torch.cuda.set_device(opt.cuda)
-    hazy_add = './data/challenging-60/*.png'
+    hazy_add = '/home/muahmmad/projects/Image_enhancement/dataset/Enhancement_Dataset/*.jpg'
     print(hazy_add)
     for item in sorted(glob.glob(hazy_add)):
         print(item)
@@ -209,9 +208,12 @@ def uie_opt(opt):
 
 
 if __name__ == "__main__":
+    torch.backends.cuda.matmul.allow_tf32 = True
+    torch.backends.cudnn.allow_tf32 = True
+    torch.cuda.empty_cache()
     parser = argparse.ArgumentParser()
     parser.add_argument('--cuda', type=int, default=0)
-    parser.add_argument('--datasets', type=str, default="challenging-60")
+    parser.add_argument('--datasets', type=str, default="")
     parser.add_argument('--clip', type=bool, default=True)
     parser.add_argument('--num_iter', type=int, default=500)
     parser.add_argument('--learning_rate', type=float, default=0.001)

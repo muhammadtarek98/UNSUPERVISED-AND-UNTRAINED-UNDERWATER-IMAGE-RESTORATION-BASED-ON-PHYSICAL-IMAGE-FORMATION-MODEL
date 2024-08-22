@@ -40,13 +40,7 @@ def crop_white_side(img, d=10):
         int((img.size[0] - d)),
         int((img.size[1] - d)),
     ]
-#    print(bbox)
-#    sys.exit()
-    
     img_cropped = img.crop(bbox)
-#    print(img_cropped.size)
-#    img_cropped.save("out/aaa.jpg")
-#    sys.exit()
     return img_cropped
 
 
@@ -218,9 +212,7 @@ def save_graphs(name, graph_dict, output_path="output/"):
         ax.plot(v, label=k)
         # ax.semilogy(v, label=k)
     ax.set_xlabel('iterations')
-    # ax.set_ylabel(name)
     ax.set_ylabel('MSE-loss')
-    # ax.set_ylabel('PSNR')
     plt.legend()
     plt.savefig(output_path + name + ".png")
 
@@ -249,9 +241,6 @@ def get_image(path, imsize=-1):
             img = img.resize(imsize, Image.ANTIALIAS)
 
     img_np = pil_to_np(img)
-#    3*460*620
-#    print(np.shape(img_np))
-
     return img, img_np
 
 
