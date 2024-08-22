@@ -217,4 +217,3 @@ if __name__ == "__main__":
     parser.add_argument('--learning_rate', type=float, default=0.001)
     options = parser.parse_args()
     uie_opt(options)
-
