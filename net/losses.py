@@ -22,7 +22,7 @@ class StdLoss(nn.Module):
         self.image = nn.Parameter(data=torch.cuda.FloatTensor(image), requires_grad=False)
         self.gray_scale = GrayscaleLayer()
 
-    def forward(self, x):
+    def forward(self,x:torch.Tensor)->torch.Tensor:
         x = self.gray_scale(x)
         return self.mse(functional.conv2d(x, self.image), functional.conv2d(x, self.blur))
 
@@ -31,7 +31,7 @@ class GrayscaleLayer(nn.Module):
     def __init__(self):
         super(GrayscaleLayer, self).__init__()
 
-    def forward(self, x):
+    def forward(self, x:torch.Tensor)->torch.Tensor:
         return torch.mean(x, 1, keepdim=True)
 
 
@@ -40,8 +40,8 @@ class TLoss(nn.Module):
     def __init__(self):
         super(TLoss, self).__init__()
 
-    def forward(self, x):
-        r, g, b = torch.split(torch.log(x), 1, dim=1)
+    def forward(self, x:torch.Tensor)->torch.Tensor:
+        r, g, b = torch.split(torch.log(x), split_size_or_sections=1, dim=1)
         w1 = r/g
         w2 = g/b
         w3 = b/r

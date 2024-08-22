@@ -72,8 +72,6 @@ class uie(object):
     def _init_ambient(self):
         ambient_net = VAE(self.image.shape)
         self.ambient_net = ambient_net.type(torch.cuda.FloatTensor)
-        # ambient_net = Net(out_channel=3)
-        # self.ambient_net = ambient_net.type(self.data_type)
 
     def _init_parameters(self):
         parameters = [p for p in self.image_net.parameters()] + \
