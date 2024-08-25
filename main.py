@@ -131,7 +131,7 @@ class uie(object):
         hsv = np_to_torch(rgb2hsv(torch_to_np(self.image_out).transpose(1, 2, 0)))
         cap_prior = hsv[:, :, :, 2] - hsv[:, :, :, 1]
         self.cap_loss = self.mse_loss(cap_prior, torch.zeros_like(cap_prior))
-        vae_loss = self.ambient_net.getLoss()
+        vae_loss = self.ambient_net.get_loss()
 
         self.total_loss = self.mseloss
         self.total_loss += vae_loss

@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 import torch
 
 
@@ -8,9 +5,9 @@ class Net(torch.nn.Module):
     def __init__(self, out_channel):
         super().__init__()
         self.conv1 = torch.nn.Sequential(
-            torch.nn.ReflectionPad2d(3),
+            torch.nn.ReflectionPad2d(padding=3),
             torch.nn.Conv2d(in_channels=3, out_channels=16, kernel_size=7,stride= 1,padding= 0),
-            torch.nn.BatchNorm2d(16),
+            torch.nn.BatchNorm2d(num_features=16),
             torch.nn.LeakyReLU(inplace=True)
         )
         self.conv2 = torch.nn.Sequential(
@@ -20,7 +17,7 @@ class Net(torch.nn.Module):
             torch.nn.LeakyReLU(inplace=True)
         )
         self.conv3 = torch.nn.Sequential(
-            torch.nn.ReflectionPad2d(3),
+            torch.nn.ReflectionPad2d(padding=3),
             torch.nn.Conv2d(in_channels=16, out_channels=16, kernel_size=7,stride= 1, padding=0),
             torch.nn.BatchNorm2d(num_features=16),
             torch.nn.LeakyReLU(inplace=True)
@@ -34,7 +31,7 @@ class Net(torch.nn.Module):
         self.conv5 = torch.nn.Sequential(
             torch.nn.ReflectionPad2d(3),
             torch.nn.Conv2d(in_channels=16, out_channels=16, kernel_size=7, stride=1,padding= 0),
-            torch.nn.BatchNorm2d(16),
+            torch.nn.BatchNorm2d(num_features=16),
             torch.nn.LeakyReLU(inplace=True)
         )
 

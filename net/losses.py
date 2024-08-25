@@ -65,7 +65,7 @@ class L_color(nn.Module):
         b,c,h,w = x.shape
 
         mean_rgb = torch.mean(x,[2,3],keepdim=True)
-        mr,mg, mb = torch.split(mean_rgb, 1, dim=1)
+        mr,mg, mb = torch.split(mean_rgb, split_size_or_sections=1, dim=1)
         Drg = torch.pow(mr-mg,2)
         Drb = torch.pow(mr-mb,2)
         Dgb = torch.pow(mb-mg,2)
@@ -78,7 +78,7 @@ class L_TV(nn.Module):
         super(L_TV,self).__init__()
         self.TVLoss_weight = TVLoss_weight
 
-    def forward(self,x):
+    def forward(self,x:torch.Tensor):
         batch_size = x.size()[0]
         h_x = x.size()[2]
         w_x = x.size()[3]
