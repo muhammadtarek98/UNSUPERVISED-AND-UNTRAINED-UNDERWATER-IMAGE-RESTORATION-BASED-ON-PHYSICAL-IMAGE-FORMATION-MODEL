@@ -1,10 +1,8 @@
 import torch
-from torch import nn
 import numpy as np
-from torch.nn import functional
 
 
-class StdLoss(nn.Module):
+class StdLoss(torch.nn.Module):
     def __init__(self):
         """
         Loss on the variance of the image.
@@ -14,20 +12,20 @@ class StdLoss(nn.Module):
         super(StdLoss, self).__init__()
         blur = (1 / 25) * np.ones((5, 5))
         blur = blur.reshape(1, 1, blur.shape[0], blur.shape[1])
-        self.mse = nn.MSELoss()
-        self.blur = nn.Parameter(data=torch.cuda.FloatTensor(blur), requires_grad=False)
+        self.mse = torch.nn.MSELoss()
+        self.blur = torch.nn.Parameter(data=torch.cuda.FloatTensor(blur), requires_grad=False)
         image = np.zeros((5, 5))
         image[2, 2] = 1
         image = image.reshape(1, 1, image.shape[0], image.shape[1])
-        self.image = nn.Parameter(data=torch.cuda.FloatTensor(image), requires_grad=False)
+        self.image = torch.nn.Parameter(data=torch.cuda.FloatTensor(image), requires_grad=False)
         self.gray_scale = GrayscaleLayer()
 
     def forward(self,x:torch.Tensor)->torch.Tensor:
         x = self.gray_scale(x)
-        return self.mse(functional.conv2d(x, self.image), functional.conv2d(x, self.blur))
+        return self.mse(torch.nn.functional.conv2d(x, self.image), torch.nn.functional.conv2d(x, self.blur))
 
 
-class GrayscaleLayer(nn.Module):
+class GrayscaleLayer(torch.nn.Module):
     def __init__(self):
         super(GrayscaleLayer, self).__init__()
 
@@ -35,7 +33,7 @@ class GrayscaleLayer(nn.Module):
         return torch.mean(x, 1, keepdim=True)
 
 
-class TLoss(nn.Module):
+class TLoss(torch.nn.Module):
 
     def __init__(self):
         super(TLoss, self).__init__()
@@ -55,15 +53,13 @@ class TLoss(nn.Module):
         return k
 
 
-class L_color(nn.Module):
+class L_color(torch.nn.Module):
 
     def __init__(self):
         super(L_color, self).__init__()
 
-    def forward(self, x):
-
+    def forward(self, x:torch.Tensor)->torch.Tensor:
         b,c,h,w = x.shape
-
         mean_rgb = torch.mean(x,[2,3],keepdim=True)
         mr,mg, mb = torch.split(mean_rgb, split_size_or_sections=1, dim=1)
         Drg = torch.pow(mr-mg,2)
@@ -73,12 +69,12 @@ class L_color(nn.Module):
         return k
 
 
-class L_TV(nn.Module):
+class L_TV(torch.nn.Module):
     def __init__(self,TVLoss_weight=1):
         super(L_TV,self).__init__()
         self.TVLoss_weight = TVLoss_weight
 
-    def forward(self,x:torch.Tensor):
+    def forward(self,x:torch.Tensor)->torch.Tensor:
         batch_size = x.size()[0]
         h_x = x.size()[2]
         w_x = x.size()[3]
